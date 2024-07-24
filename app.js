@@ -9,8 +9,8 @@ const User=require('./models/user');
 
 const app = express();
 
-app.set('view engine', 'ejs');
-app.set('views', 'views');
+app.set('view engine', 'ejs'); 
+app.set('views', path.join(__dirname, 'views'));
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
@@ -28,6 +28,11 @@ app.use(async(req, res, next) => {
     }
     
 });
+
+app.use((req,res,next)=>{
+  console.log(req.url)
+  next()
+})
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);

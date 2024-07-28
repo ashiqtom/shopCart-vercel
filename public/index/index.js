@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadHome = async () => {
         try {
             mainContent.innerHTML = ''; // Clear existing content
-            const response = await axios.get('/products');
+            const response = await axios.get('/shop/products');
             const { prods } = response.data;
 
             if (prods.length > 0) {
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 grid.querySelectorAll('.addToCartBtn').forEach(button => {
                     button.addEventListener('click', async (event) => {
                         const productId = event.target.getAttribute('data-product-id');
-                        const response=await axios.post(`/cart/${productId}`); // Add product to cart
+                        const response=await axios.post(`/shop/cart/${productId}`); // Add product to cart
                         loadCart(); // Reload cart to reflect changes
                     });
                 });
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mainContent.innerHTML = '<div class="container"></div>'; // Add container class
         const container = mainContent.querySelector('.container');
         try {
-            const response = await axios.get('/cart');
+            const response = await axios.get('/shop/cart');
             const cartItems = response.data;
 
             if (cartItems.length > 0) {
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartList.querySelectorAll('.deleteCartItemBtn').forEach(button => {
                     button.addEventListener('click', async (event) => {
                         const productId = event.target.getAttribute('data-product-id');
-                        await axios.post(`/cartDeleteItem/`, { productId }); 
+                        await axios.post(`/shop/cartDeleteItem/`, { productId }); 
                         loadCart(); 
                     });
                 });
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 orderBtn.textContent = 'Order'
                 orderBtn.className = 'order-button'; // Added class for styling
                 orderBtn.addEventListener('click', async () => {
-                    const orders = await axios.post('/create-order');
+                    const orders = await axios.post('/shop/create-order');
                     loadOrder()
                 })
                 cartList.appendChild(orderBtn)
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const container = mainContent.querySelector('.container');
         container.innerHTML = '';
         try {
-            const response = await axios.get('/orders');
+            const response = await axios.get('/shop/orders');
             const orders = response.data;
     
             if (orders.length > 0) {
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadProduct=async()=>{
         try {
             mainContent.innerHTML = ''; // Clear existing content
-            const response = await axios.get('/products');
+            const response = await axios.get('/shop/products');
             const { prods } = response.data;
 
             if (prods.length > 0) {

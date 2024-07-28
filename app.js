@@ -7,11 +7,9 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors())
-
 app.use(bodyParser.json()); 
 
 const User=require('./models/user');
-
 app.use(async(req, res, next) => {
   try{
     const user = await User.findById('669f7d872e711c87fcbbe1ba')
@@ -23,15 +21,16 @@ app.use(async(req, res, next) => {
     }    
 });
 
-//for getting ublic folder
 app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index', 'index.html'));
+});
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const errorController = require('./controllers/error');
-
 app.use('/admin', adminRoutes);
-app.use(shopRoutes);
+app.use('/shop',shopRoutes);
 app.use(errorController.get404);
 
 (async () => {

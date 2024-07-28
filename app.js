@@ -3,20 +3,14 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose=require('mongoose')
-
-const errorController = require('./controllers/error');
-const User=require('./models/user');
+const cors = require('cors'); 
 
 const app = express();
+app.use(cors())
 
-app.set('view engine', 'ejs'); 
-app.set('views', path.join(__dirname, 'views'));
+app.use(bodyParser.json()); 
 
-const adminRoutes = require('./routes/admin');
-const shopRoutes = require('./routes/shop');
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+const User=require('./models/user');
 
 app.use(async(req, res, next) => {
   try{
@@ -24,19 +18,20 @@ app.use(async(req, res, next) => {
     req.user = user;
     next();
     } catch(err){
-      console.log(err);
-    }
-    
+      console.error(err);
+      res.status(404).render('404', { pageTitle: 'Page Not Found', path: '/404' });
+    }    
 });
 
-app.use((req,res,next)=>{
-  console.log(req.url)
-  next()
-})
+//for getting ublic folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+const adminRoutes = require('./routes/admin');
+const shopRoutes = require('./routes/shop');
+const errorController = require('./controllers/error');
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
-
 app.use(errorController.get404);
 
 (async () => {
